@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>考试结果 · 全媒体运营师三级视听</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container" style="display:flex;align-items:center;min-height:100vh;">
+    <div class="card text-center" style="width:100%;max-width:460px;margin:0 auto;">
+      <div id="result-icon" style="font-size:4rem;margin-bottom:12px"></div>
+      <h1 id="result-title" style="margin-bottom:8px"></h1>
+      <p id="result-score" style="font-size:3.5rem;font-weight:700;color:#4f46e5;margin:16px 0"></p>
+      <p id="result-detail" class="text-muted" style="margin-bottom:28px"></p>
+      <div class="flex gap-12" style="justify-content:center;flex-wrap:wrap;">
+        <a href="/exam" class="btn btn-primary">再来一次</a>
+        <a href="/wrong" class="btn btn-secondary">查看错题集</a>
+      </div>
+      <button id="btn-logout" class="btn btn-secondary mt-16" style="width:100%">退出登录</button>
+    </div>
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script>
+    const user = Auth.require();
+    if (!user) throw new Error('not logged in');
+
+    const data = JSON.parse(sessionStorage.getItem('exam_result') || 'null');
+    if (!data) { location.href = '/exam'; throw new Error('no result'); }
+
+    const { score, total, pct } = data;
+    const iconEl   = document.getElementById('result-icon');
+    const titleEl  = document.getElementById('result-title');
+    const scoreEl  = document.getElementById('result-score');
+    const detailEl = document.getElementById('result-detail');
+
+    if (pct >= 80) {
+      iconEl.textContent  = '🎉';
+      titleEl.textContent = '优秀！继续保持';
+    } else if (pct >= 60) {
+      iconEl.textContent  = '😊';
+      titleEl.textContent = '良好，再接再厉';
+    } else {
+      iconEl.textContent  = '😔';
+      titleEl.textContent = '还需努力，去看看错题吧';
+    }
+
+    scoreEl.textContent  = pct + ' 分';
+    detailEl.textContent = `共 ${total} 题，答对 ${score} 题，答错 ${total - score} 题`;
+
+    document.getElementById('btn-logout').onclick = () => { Auth.clear(); location.href = '/'; };
+  </script>
+</body>
+</html>

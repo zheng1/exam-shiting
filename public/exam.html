@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>答题 · 全媒体运营师三级视听</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+
+    <!-- 顶部导航 -->
+    <div class="flex justify-between align-center" style="margin-bottom:14px">
+      <span id="user-name" class="text-muted"></span>
+      <div class="flex gap-8">
+        <a href="/wrong" class="btn btn-secondary" style="font-size:.85rem;padding:7px 14px">错题集</a>
+        <button id="btn-logout" class="btn btn-secondary" style="font-size:.85rem;padding:7px 14px">退出</button>
+      </div>
+    </div>
+
+    <!-- 进度 -->
+    <div class="progress-bar" style="margin-bottom:8px">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+    <div class="flex justify-between align-center" style="margin-bottom:16px">
+      <span id="progress-text" class="text-muted"></span>
+      <span id="score-text" class="text-muted"></span>
+    </div>
+
+    <!-- 题目卡片 -->
+    <div class="card" id="question-card">
+      <div class="flex align-center gap-8" style="margin-bottom:14px">
+        <span id="q-badge" class="badge"></span>
+      </div>
+
+      <!-- 案例背景 -->
+      <div id="case-context" class="case-context" style="display:none"></div>
+
+      <!-- 题目文字 -->
+      <p id="q-text" style="font-size:1rem;line-height:1.75;font-weight:500;margin-bottom:4px"></p>
+      <p id="multiple-hint" style="display:none;color:#92400e;font-size:.82rem;margin-bottom:2px">
+        （多选题，请选择所有正确答案后提交）
+      </p>
+
+      <!-- 选项 -->
+      <ul class="option-list" id="option-list"></ul>
+
+      <!-- 答题反馈 -->
+      <div id="feedback" class="feedback" style="display:none"></div>
+
+      <!-- 提交 -->
+      <div style="margin-top:20px;text-align:right">
+        <button class="btn btn-primary" id="btn-submit" disabled>提交答案</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/exam.js"></script>
+</body>
+</html>
