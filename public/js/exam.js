@@ -13,7 +13,7 @@ let submitted = false;
 
 async function loadQuestions() {
   try {
-    questions = await API.get('/api/questions?count=20&types=single,multiple,judge');
+    questions = await API.get('/api/questions?count=100&types=single,multiple,judge');
   } catch {
     document.getElementById('question-card').textContent = '题库加载失败，请刷新重试';
     return;

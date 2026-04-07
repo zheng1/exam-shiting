@@ -15,7 +15,7 @@ function shuffle(arr) {
 
 // GET /api/questions?count=20&types=single,multiple,judge
 router.get('/', (req, res) => {
-  const count = Math.min(parseInt(req.query.count) || 20, 100);
+  const count = Math.min(parseInt(req.query.count) || 100, 200);
   const types = req.query.types
     ? req.query.types.split(',').map(t => t.trim())
     : ['single', 'multiple', 'judge'];
