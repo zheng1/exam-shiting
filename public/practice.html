@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>答题 · 全媒体运营师三级视听</title>
+  <title>错题练习 · 全媒体运营师三级视听</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
@@ -13,8 +13,7 @@
     <div class="flex justify-between align-center" style="margin-bottom:14px">
       <span id="user-name" class="text-muted"></span>
       <div class="flex gap-8">
-        <a href="/practice" class="btn btn-secondary" style="font-size:.85rem;padding:7px 14px">练习错题</a>
-        <a href="/wrong" class="btn btn-secondary" style="font-size:.85rem;padding:7px 14px">错题集</a>
+        <a href="/wrong" class="btn btn-secondary" style="font-size:.85rem;padding:7px 14px">← 错题集</a>
         <button id="btn-logout" class="btn btn-secondary" style="font-size:.85rem;padding:7px 14px">退出</button>
       </div>
     </div>
@@ -34,22 +33,15 @@
         <span id="q-badge" class="badge"></span>
       </div>
 
-      <!-- 案例背景 -->
       <div id="case-context" class="case-context" style="display:none"></div>
-
-      <!-- 题目文字 -->
       <p id="q-text" style="font-size:1rem;line-height:1.75;font-weight:500;margin-bottom:4px"></p>
       <p id="multiple-hint" style="display:none;color:#92400e;font-size:.82rem;margin-bottom:2px">
         （多选题，请选择所有正确答案后提交）
       </p>
 
-      <!-- 选项 -->
       <ul class="option-list" id="option-list"></ul>
-
-      <!-- 答题反馈 -->
       <div id="feedback" class="feedback" style="display:none"></div>
 
-      <!-- 提交 -->
       <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:center">
         <button class="btn btn-secondary" id="btn-prev">← 上一题</button>
         <button class="btn btn-primary" id="btn-submit" disabled>提交答案</button>
@@ -59,6 +51,6 @@
   </div>
 
   <script src="/js/common.js"></script>
-  <script src="/js/exam.js"></script>
+  <script src="/js/practice.js"></script>
 </body>
 </html>

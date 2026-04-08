@@ -70,7 +70,8 @@ function insertRecord({ userId, questionId, userAnswer, correctAnswer, isCorrect
 
 /**
  * 查询某用户的错题列表
- * 每道题只返回最近一次答错的记录
+ * 每道题只返回最近一次的答题记录，且该次答错才算错题
+ * （若最近一次答对，则已从错题集移除）
  */
 function getWrongRecords(userId) {
   return db.prepare(`
@@ -79,10 +80,10 @@ function getWrongRecords(userId) {
     INNER JOIN (
       SELECT question_id, MAX(answered_at) AS latest
       FROM records
-      WHERE user_id = ? AND is_correct = 0
+      WHERE user_id = ?
       GROUP BY question_id
-    ) AS latest ON r.question_id = latest.question_id AND r.answered_at = latest.latest
-    WHERE r.user_id = ?
+    ) AS lv ON r.question_id = lv.question_id AND r.answered_at = lv.latest
+    WHERE r.user_id = ? AND r.is_correct = 0
     ORDER BY r.answered_at DESC
   `).all(userId, userId);
 }

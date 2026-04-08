@@ -21,9 +21,10 @@ app.post('/api/papers/reset', (req, res) => {
   res.json({ ok: true });
 });
 
-app.get('/exam',   (req, res) => res.sendFile(path.join(__dirname, 'public/exam.html')));
-app.get('/result', (req, res) => res.sendFile(path.join(__dirname, 'public/result.html')));
-app.get('/wrong',  (req, res) => res.sendFile(path.join(__dirname, 'public/wrong.html')));
+app.get('/exam',     (req, res) => res.sendFile(path.join(__dirname, 'public/exam.html')));
+app.get('/practice', (req, res) => res.sendFile(path.join(__dirname, 'public/practice.html')));
+app.get('/result',   (req, res) => res.sendFile(path.join(__dirname, 'public/result.html')));
+app.get('/wrong',    (req, res) => res.sendFile(path.join(__dirname, 'public/wrong.html')));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
