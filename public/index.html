@@ -112,6 +112,7 @@
       }
 
       Auth.set({ userId: res.userId, name: res.name });
+      warmCache(res.name);
       location.href = '/exam';
     };
 

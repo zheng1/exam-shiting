@@ -35,6 +35,9 @@ async function loadQuestions() {
     questions   = data.questions;
     answeredMap = data.answeredMap || {};
 
+    // 预热错题集缓存，确保离线时 /wrong 可用
+    fetch('/api/records/' + encodeURIComponent(user.name)).catch(() => {});
+
     current = firstUnansweredIndex();
 
     if (current >= questions.length) {
@@ -219,6 +222,10 @@ async function submitAnswer() {
     if (!res.offline && res.paperComplete) {
       btn.textContent = '查看本卷结果 →';
       btn.onclick     = showPaperComplete;
+    }
+    // 答完题后刷新错题集缓存，确保离线时错题集可用
+    if (!res.offline) {
+      fetch('/api/records/' + encodeURIComponent(user.name)).catch(() => {});
     }
   } catch (e) { /* 静默失败，本地状态已更新 */ }
 }

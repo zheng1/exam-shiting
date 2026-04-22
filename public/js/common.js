@@ -46,6 +46,19 @@ const LocalWrong = {
   },
 };
 
+/**
+ * 预热缓存：登录后立即把所有关键 API 缓存到 SW
+ * 这样离线时 /exam、/wrong、/practice 都能正常工作
+ */
+function warmCache(userName) {
+  if (!navigator.serviceWorker || !navigator.serviceWorker.controller) return;
+  const urls = [
+    '/api/questions?name=' + encodeURIComponent(userName),
+    '/api/records/'        + encodeURIComponent(userName),
+  ];
+  navigator.serviceWorker.controller.postMessage({ type: 'CACHE_URLS', urls });
+}
+
 /** 题型中文标签 HTML */
 function typeBadge(type) {
   const map = {
