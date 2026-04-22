@@ -56,3 +56,85 @@ function typeBadge(type) {
   const [cls, label] = map[type] || ['single', type];
   return `<span class="badge badge-${cls}">${label}</span>`;
 }
+
+// OfflineQueue — 离线答题队列（IndexedDB）
+const OfflineQueue = (() => {
+  const DB_NAME    = 'exam-offline';
+  const STORE_NAME = 'pending_records';
+  let db = null;
+
+  function openDB() {
+    if (db) return Promise.resolve(db);
+    return new Promise((resolve, reject) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = e => {
+        e.target.result.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+      };
+      req.onsuccess = e => { db = e.target.result; resolve(db); };
+      req.onerror   = e => reject(e.target.error);
+    });
+  }
+
+  async function enqueue(payload) {
+    const d = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx  = d.transaction(STORE_NAME, 'readwrite');
+      const req = tx.objectStore(STORE_NAME).add({ payload, ts: Date.now() });
+      req.onsuccess = () => resolve(req.result);
+      req.onerror   = e => reject(e.target.error);
+    });
+  }
+
+  async function getAll() {
+    const d = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx  = d.transaction(STORE_NAME, 'readonly');
+      const req = tx.objectStore(STORE_NAME).getAll();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror   = e => reject(e.target.error);
+    });
+  }
+
+  async function remove(id) {
+    const d = await openDB();
+    return new Promise((resolve, reject) => {
+      const tx  = d.transaction(STORE_NAME, 'readwrite');
+      const req = tx.objectStore(STORE_NAME).delete(id);
+      req.onsuccess = () => resolve();
+      req.onerror   = e => reject(e.target.error);
+    });
+  }
+
+  async function flush() {
+    const items = await getAll();
+    for (const item of items) {
+      try {
+        const res = await fetch('/api/records', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(item.payload),
+        });
+        if (res.ok) await remove(item.id);
+      } catch (e) {
+        break;
+      }
+    }
+  }
+
+  window.addEventListener('online', flush);
+
+  async function submit(payload) {
+    if (!navigator.onLine) {
+      await enqueue(payload);
+      return { ok: true, offline: true };
+    }
+    try {
+      return await API.post('/api/records', payload);
+    } catch (e) {
+      await enqueue(payload);
+      return { ok: true, offline: true };
+    }
+  }
+
+  return { submit, flush };
+})();

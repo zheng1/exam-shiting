@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>全媒体运营师三级视听 · 在线考试</title>
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#1d4ed8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="理论考试">
+  <link rel="apple-touch-icon" href="/icons/icon-192.svg">
 </head>
 <body>
   <div class="container" style="display:flex;align-items:center;min-height:100vh;">
@@ -37,6 +43,24 @@
   </div>
 
   <script src="/js/common.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        reg.addEventListener('updatefound', () => {
+          const nw = reg.installing;
+          nw.addEventListener('statechange', () => {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              const bar = document.createElement('div');
+              bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#1d4ed8;color:#fff;text-align:center;padding:10px;font-size:.85rem;z-index:9999;cursor:pointer';
+              bar.textContent = '✅ 已更新，点击刷新';
+              bar.onclick = () => location.reload();
+              document.body.appendChild(bar);
+            }
+          });
+        });
+      });
+    }
+  </script>
   <script>
     // 已登录直接跳答题页
     if (Auth.get()) location.href = '/exam';

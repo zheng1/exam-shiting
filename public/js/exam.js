@@ -211,12 +211,12 @@ async function submitAnswer() {
   btn.textContent = isLast ? '查看结果 →' : '下一题 →';
   btn.onclick     = () => { current++; renderQuestion(); };
 
-  // 同步到服务器
+  // 同步到服务器（离线时入队，联网后自动 flush）
   try {
-    const res = await API.post('/api/records', {
+    const res = await OfflineQueue.submit({
       name: user.name, questionId: q.id, userAnswer, paperId,
     });
-    if (res.paperComplete) {
+    if (!res.offline && res.paperComplete) {
       btn.textContent = '查看本卷结果 →';
       btn.onclick     = showPaperComplete;
     }
